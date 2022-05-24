@@ -1,5 +1,5 @@
 //
-// Created by Nicolas Petras, Billy Penton-Voak and Raymond Gorle
+// Created by Nicolas Petras, Billy Penton-Voak and Raymond Gorle on 23/05/2022.
 //
 
 #ifndef GROUP_PROJECT_PLANE_H
@@ -10,6 +10,7 @@
 #include <string>
 #include <tuple>
 #include <cstdlib>
+#include <stack>
 #include <algorithm>
 #include <iterator>
 #include <cctype>
@@ -128,9 +129,6 @@ public:
         string temp;
 
         int row = (index / classSeatsPerRow) + 1;
-        if (row > 12) {
-            row += 1;
-        }
         char seat = static_cast<char>(65 + (index % classSeatsPerRow));
         temp = to_string(row);
         temp.push_back(seat);
@@ -138,13 +136,7 @@ public:
     }
 
     int convertSeatToIndex(int row, char seat, int classSeatsPerRow) {
-        int index;
-        if (row > 12) {
-            index = ((row - 2) * classSeatsPerRow) + (static_cast<int>(seat) - 65);
-
-        } else {
-            index = ((row - 1) * classSeatsPerRow) + (static_cast<int>(seat) - 65);
-        }
+        int index = ((row - 1) * classSeatsPerRow) + (static_cast<int>(seat) - 65);
         return index;
     }
 
@@ -227,8 +219,6 @@ public:
                 cin >> row;
                 cout << "Provide seat letter: ";
                 cin >> seat;
-
-                seat = static_cast<char>(toupper(seat));
 
                 invalidInput = row < 0 || row > classRows || seat < 65 || seat > 65 + (classSeatsPerRow - 1);
             } while (invalidInput);
