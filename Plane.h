@@ -1,5 +1,5 @@
 //
-// Created by Nicolas Petras on 23/05/2022.
+// Created by Nicolas Petras, Billy Penton-Voak and Raymond Gorle on 23/05/2022.
 //
 
 #ifndef GROUP_PROJECT_PLANE_H
