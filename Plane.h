@@ -72,16 +72,19 @@ struct Plane {
             case 1:
                 printClass("First", firstClassRows, firstClassSeatsPerRows,
                            firstClass);
+                cout << endl;
                 break;
 
             case 2:
                 printClass("Business", businessClassRows, businessClassSeatsPerRow,
                            businessClass);
+                cout << endl;
                 break;
 
             case 3:
                 printClass("Economy", economyClassRows, economyClassSeatsPerRow,
                            economyClass);
+                cout << endl;
                 break;
 
             default:

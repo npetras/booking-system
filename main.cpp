@@ -6,9 +6,11 @@
 using namespace std;
 
 int main() {
-    auto *plane = new Plane("BA10510", 4, 3, 10, 10,
-                            10, 10);
+    auto *plane = new Plane("BA10510", 4, 3, 6,
+                            30,6, 40);
     plane->print(1);
+    plane->print(2);
+    plane->print(3);
     cout << endl;
 
     int choice;
