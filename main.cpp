@@ -26,30 +26,23 @@ int main() {
         int passengers;
 
         if (choice >= 1 && choice <= 3) {
+            plane->print(choice);
             cout << "Number of passengers: ";
             cin >> passengers;
+
+            if (plane->checkFreeSeats(choice) >= passengers) {
+                plane->suggestSeats(passengers, choice);
+                plane->bookSeats(choice, passengers);
+            } else {
+                cout << "This class is full" << endl;
+            }
+        } else if (choice == EXIT) {
+            cout << "Exiting..." << endl;
+        } else {
+            cout << "Invalid choice" << endl;
         }
 
-        switch (choice) {
-            case 1:
-                if (plane->checkFreeSeats() >= passengers) {
-                    plane->suggestSeats(passengers, choice);
-                    plane->bookSeats(choice, passengers);
-                } else {
-                    cout << "First class is full" << endl;
-                }
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case EXIT:
-                break;
-            default:
-                cout << "Invalid choice" << endl;
-                break;
 
-        }
 
         plane->print(1);
 

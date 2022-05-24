@@ -111,13 +111,34 @@ struct Plane {
     }
 
 
-    int checkFreeSeats() {
+    int checkFreeSeats(int choice) {
         int counter = 0;
-        for (int i = 0; i < firstClassRows * firstClassSeatsPerRows; ++i) {
-            if (firstClass[i] == 0) {
+        int *classArr;
+        int classRows;
+        int classSeatsPerRow;
+        switch (choice) {
+            case 1:
+                classArr = firstClass;
+                classRows = firstClassRows;
+                classSeatsPerRow = firstClassSeatsPerRows;
+                break;
+            case 2:
+                classArr = businessClass;
+                classRows = businessClassRows;
+                classSeatsPerRow = businessClassSeatsPerRow;
+                break;
+            case 3:
+                classArr = economyClass;
+                classRows = economyClassRows;
+                classSeatsPerRow = economyClassSeatsPerRow;
+                break;
+        }
+        for (int i = 0; i < classRows * classSeatsPerRow; ++i) {
+            if (classArr[i] == 0) {
                 counter++;
             }
         }
+        cout << "Free seats: " << counter << endl;
         return counter;
     }
 
