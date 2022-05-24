@@ -67,33 +67,7 @@ struct Plane {
         free(economyClass);
     }
 
-    void print(int choice) {
-        switch (choice) {
-            case 1:
-                printClass("First", firstClassRows, firstClassSeatsPerRows,
-                           firstClass);
-                cout << endl;
-                break;
-
-            case 2:
-                printClass("Business", businessClassRows, businessClassSeatsPerRow,
-                           businessClass);
-                cout << endl;
-                break;
-
-            case 3:
-                printClass("Economy", economyClassRows, economyClassSeatsPerRow,
-                           economyClass);
-                cout << endl;
-                break;
-
-            default:
-                cout << "Invalid" << endl;
-                break;
-        }
-    }
-
-    void printClass(string className, int classRows, int classSeatsPerRow, int *classArr) {
+    void printClass(string className, int *classArr, int classRows, int classSeatsPerRow) {
         cout << className << " class";
         for (int i = 0; i < classRows * classSeatsPerRow; i++) {
             if (i % classSeatsPerRow == 0) {
@@ -111,55 +85,32 @@ struct Plane {
                 cout << '-';
             }
         }
+        cout << endl;
     }
 
+    void printAll() {
+        printClass("First", firstClass, firstClassRows,
+                   firstClassSeatsPerRows);
+        printClass("Business", businessClass, businessClassRows,
+                   businessClassSeatsPerRow);
+        printClass("Economy", economyClass, economyClassRows,
+                   economyClassSeatsPerRow);
+    }
 
-    int checkFreeSeats(int choice) {
+    int checkFreeSeats(int* classArr, int classRows, int classSeatsPerRow) {
         int counter = 0;
-        int *classArr;
-        int classRows;
-        int classSeatsPerRow;
-        switch (choice) {
-            case 1:
-                classArr = firstClass;
-                classRows = firstClassRows;
-                classSeatsPerRow = firstClassSeatsPerRows;
-                break;
-            case 2:
-                classArr = businessClass;
-                classRows = businessClassRows;
-                classSeatsPerRow = businessClassSeatsPerRow;
-                break;
-            case 3:
-                classArr = economyClass;
-                classRows = economyClassRows;
-                classSeatsPerRow = economyClassSeatsPerRow;
-                break;
-        }
-        for (int i = 0; i < classRows * classSeatsPerRow; ++i) {
+
+        for (int i = 0; i < classRows * classSeatsPerRow; i++) {
             if (classArr[i] == 0) {
                 counter++;
             }
         }
-        cout << "Free seats: " << counter << endl;
+        cout << "Seats remaining: " << counter << endl;
         return counter;
     }
 
-    string convertIndexToSeat(int index, int choice) {
+    string convertIndexToSeat(int index, int classSeatsPerRow) {
         string temp;
-        int classSeatsPerRow;
-
-        switch (choice) {
-            case 1:
-                classSeatsPerRow = firstClassSeatsPerRows;
-                break;
-            case 2:
-                classSeatsPerRow = businessClassSeatsPerRow;
-                break;
-            case 3:
-                classSeatsPerRow = economyClassSeatsPerRow;
-                break;
-        }
 
         int row = (index / classSeatsPerRow) + 1;
         char seat = static_cast<char>(65 + (index % classSeatsPerRow));
@@ -168,57 +119,24 @@ struct Plane {
         return temp;
     }
 
-    int convertSeatToIndex(int row, char seat, int choice) {
-
-        int classSeatsPerRow;
-
-        switch (choice) {
-            case 1:
-                classSeatsPerRow = firstClassSeatsPerRows;
-                break;
-            case 2:
-                classSeatsPerRow = businessClassSeatsPerRow;
-                break;
-            case 3:
-                classSeatsPerRow = economyClassSeatsPerRow;
-                break;
-        }
-
+    int convertSeatToIndex(int row, char seat, int classSeatsPerRow) {
         int index = ((row - 1) * classSeatsPerRow) + (static_cast<int>(seat) - 65);
         return index;
     }
 
-    int *suggestSeats(int passengers, int choice) {
+    int* suggestSeats(int passengers, int* classArr, int classRows, int classSeatsPerRow) {
         int seats[passengers];
+
         currPos = 0;
-        int *classArr;
-        int classRows;
-        int classSeatsPerRow;
-        switch (choice) {
-            case 1:
-                classArr = firstClass;
-                classRows = firstClassRows;
-                classSeatsPerRow = firstClassSeatsPerRows;
-                break;
-            case 2:
-                classArr = businessClass;
-                classRows = businessClassRows;
-                classSeatsPerRow = businessClassSeatsPerRow;
-                break;
-            case 3:
-                classArr = economyClass;
-                classRows = economyClassRows;
-                classSeatsPerRow = economyClassSeatsPerRow;
-                break;
-            default:
-                break;
-        }
+
         findSeats(passengers, seats, classArr, classRows, classSeatsPerRow);
+
         cout << "Suggested Seats: ";
         for (int i = 0; i < passengers; ++i) {
-            cout << convertIndexToSeat(seats[i], choice) << "\t";
+            cout << convertIndexToSeat(seats[i], classSeatsPerRow) << "\t";
         }
         cout << endl;
+
         return seats;
     }
 
@@ -256,29 +174,85 @@ struct Plane {
             int splitPassengers1 = passengers / 2;
             int splitPassengers2 = passengers - splitPassengers1;
 
-            cout << currPos << endl;
+//            cout << currPos << endl;
             findSeats(splitPassengers1, seats, classArr, classRows, classSeatsPerRow);
-            cout << currPos << endl;
+//            cout << currPos << endl;
             findSeats(splitPassengers2, seats, classArr, classRows, classSeatsPerRow);
         }
     }
 
 
-    void bookSeats(int choice, int passengers) {
+    void bookSeats(int passengers, int classSeatsPerRow) {
         int row;
         char seat;
+
         while (passengers > 0) {
             cout << "Provide seat row: ";
             cin >> row;
             cout << "Provide seat letter: ";
             cin >> seat;
-            int index = convertSeatToIndex(row, seat, choice);
+
+            // TODO: range checks needed
+
+            int index = convertSeatToIndex(row, seat, classSeatsPerRow);
             if (firstClass[index] == 0) {
                 firstClass[index] = 1;
                 passengers--;
             } else {
                 cout << "Seat is already booked, please provide another" << endl;
             }
+        }
+    }
+
+    void makeBooking(int choice) {
+        int passengers;
+
+        string className;
+        int *classArr;
+        int classRows;
+        int classSeatsPerRow;
+
+        switch (choice) {
+            case 1:
+                className = "First";
+                classArr = firstClass;
+                classRows = firstClassRows;
+                classSeatsPerRow = firstClassSeatsPerRows;
+                break;
+            case 2:
+                className = "Business";
+                classArr = businessClass;
+                classRows = businessClassRows;
+                classSeatsPerRow = businessClassSeatsPerRow;
+                break;
+            case 3:
+                className = "Economy";
+                classArr = economyClass;
+                classRows = economyClassRows;
+                classSeatsPerRow = economyClassSeatsPerRow;
+                break;
+            default:
+                className = "Invalid";
+                classArr = nullptr;
+                classRows = 0;
+                classSeatsPerRow = 0;
+
+                cout << "Invalid class type" << endl;
+                break;
+        }
+
+        this->printClass(className, classArr, classRows, classSeatsPerRow);
+
+        cout << "Number of passengers: ";
+        cin >> passengers;
+
+        if (this->checkFreeSeats(classArr, classRows, classSeatsPerRow) >= passengers) {
+            this->suggestSeats(passengers, classArr, classRows, classSeatsPerRow);
+            // TODO: Option to take suggested seats
+            this->bookSeats(passengers, classSeatsPerRow);
+            this->printClass(className, classArr, classRows, classSeatsPerRow);
+        } else {
+            cout << "This class is full" << endl;
         }
     }
 };

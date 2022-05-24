@@ -3,14 +3,14 @@
 
 #define EXIT 4
 
+void runApp(Plane *plane, int choice, int passengers);
+
 using namespace std;
 
 int main() {
     auto *plane = new Plane("BA10510", 4, 3, 6,
                             30,6, 40);
-    plane->print(1);
-    plane->print(2);
-    plane->print(3);
+    plane->printAll();
     cout << endl;
 
     int choice;
@@ -28,26 +28,12 @@ int main() {
         int passengers;
 
         if (choice >= 1 && choice <= 3) {
-            plane->print(choice);
-            cout << "Number of passengers: ";
-            cin >> passengers;
-
-            if (plane->checkFreeSeats(choice) >= passengers) {
-                plane->suggestSeats(passengers, choice);
-                plane->bookSeats(choice, passengers);
-            } else {
-                cout << "This class is full" << endl;
-            }
+            plane->makeBooking(choice);
         } else if (choice == EXIT) {
             cout << "Exiting..." << endl;
         } else {
             cout << "Invalid choice" << endl;
         }
-
-
-
-        plane->print(1);
-
     } while (choice != EXIT);
 
     delete plane;
