@@ -174,9 +174,7 @@ struct Plane {
             int splitPassengers1 = passengers / 2;
             int splitPassengers2 = passengers - splitPassengers1;
 
-//            cout << currPos << endl;
             findSeats(splitPassengers1, seats, classArr, classRows, classSeatsPerRow);
-//            cout << currPos << endl;
             findSeats(splitPassengers2, seats, classArr, classRows, classSeatsPerRow);
         }
     }
