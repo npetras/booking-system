@@ -8,8 +8,9 @@ void runApp(Plane *plane, int choice, int passengers);
 using namespace std;
 
 int main() {
-    auto *plane = new Plane("BA10510", 4, 3, 6,
-                            30,6, 40);
+    auto *plane = new Plane("BA10510", "London", "Frankfurt", 100,
+                            65,45, 4, 3,
+                            6,30,6, 40);
     plane->printAll();
     cout << endl;
 
